@@ -1,14 +1,18 @@
 from flask import Flask, request, jsonify
 import pickle
 import numpy as np
+import os  # 👈 to read environment variables
 
 app = Flask(__name__)
 
-# Load model and scaler
-with open('app/model.pkl', 'rb') as f:
+# Load model and scaler using env variables
+MODEL_PATH = os.getenv('MODEL_PATH', 'app/model.pkl')
+SCALER_PATH = os.getenv('SCALER_PATH', 'app/scaler.pkl')
+
+with open(MODEL_PATH, 'rb') as f:
     model = pickle.load(f)
 
-with open('app/scaler.pkl', 'rb') as f:
+with open(SCALER_PATH, 'rb') as f:
     scaler = pickle.load(f)
 
 @app.route('/')
@@ -23,5 +27,3 @@ def predict():
     prediction = model.predict(features_scaled)
     return jsonify({'prediction': int(prediction[0])})
 
-if __name__ == '__main__':
-    app.run(debug=True)
