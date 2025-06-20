@@ -26,4 +26,6 @@ def predict():
     features_scaled = scaler.transform(features)
     prediction = model.predict(features_scaled)
     return jsonify({'prediction': int(prediction[0])})
+# Trigger rebuild to avoid pywin32 error
+
 
